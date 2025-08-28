@@ -17,3 +17,5 @@ nodemon → automatically restarts the server when you save changes.
 npm install uuid
 
 uuid → library to generate unique IDs (useful for users, posts, or crisis reports).
+
+npm install @fortawesome/fontawesome-free

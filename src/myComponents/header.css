@@ -3,7 +3,7 @@ body {
 }
 
 .custom-navbar {
-  background-color: #8C1007 ;
+background: linear-gradient(135deg, #660B05 0%, #8B1538 50%, #660B05 100%);
 }
 
 .custom-navbar .navbar-brand {

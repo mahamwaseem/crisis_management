@@ -18,4 +18,9 @@ npm install uuid
 
 uuid → library to generate unique IDs (useful for users, posts, or crisis reports).
 
+npm install bcrypt
+
+npm install joi
+
+
 npm install @fortawesome/fontawesome-free

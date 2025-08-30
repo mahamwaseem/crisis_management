@@ -24,3 +24,6 @@ npm install joi
 
 
 npm install @fortawesome/fontawesome-free
+
+npm install jsonwebtoken
+

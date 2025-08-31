@@ -6,8 +6,9 @@ import AboutSection from "./pages/AboutSection";
 import Footer from './pages/footer';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Signup from "./pages/Signup";
+import Login from "./pages/login"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import Dashboard  from './pages/Dashboard';
 
 function App() {
   return (
@@ -25,8 +26,10 @@ function App() {
           }
         />
 
-        {/* Signup Page */}
+        
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
 
             
       </Routes>

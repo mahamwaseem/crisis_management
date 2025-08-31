@@ -33,7 +33,9 @@ export default function Header() {
 
             </ul>
             <div className="d-flex">
-              <button className="btn btn-outline-light me-2" type="button">Login</button>
+              <Link to="/login">
+                <button className="btn btn-outline-light me-2" type="button">Login</button>
+              </Link>
               <Link to="/signup">
                 <button className="btn btn-light" type="button">Sign Up</button>
               </Link>

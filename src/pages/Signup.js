@@ -28,7 +28,7 @@ const SignupPage = () => {
         password:formData.password
       });
       if(res.data.success){
-        alert("Sihnup Successful!");
+        alert("Signup Successful!");
         window.location.href = "/login";
       }else{
         alert(res.data.message || "Signup failed!");

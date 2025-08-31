@@ -27,3 +27,7 @@ npm install @fortawesome/fontawesome-free
 
 npm install jsonwebtoken
 
+npm install axios
+
+npm install react-router-dom
+

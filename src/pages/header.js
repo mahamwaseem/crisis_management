@@ -1,5 +1,6 @@
 import React from 'react';
 import "./header.css";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -7,13 +8,13 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg custom-navbar">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">R2R</a>
-          <button 
-            className="navbar-toggler" 
-            type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarNav" 
-            aria-controls="navbarNav" 
-            aria-expanded="false" 
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
             aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
@@ -29,11 +30,13 @@ export default function Header() {
               <li className="nav-item">
                 <a className="nav-link" href="#features">Features</a>
               </li>
-            
+
             </ul>
             <div className="d-flex">
               <button className="btn btn-outline-light me-2" type="button">Login</button>
-              <button className="btn btn-light" type="button">Sign Up</button>
+              <Link to="/signup">
+                <button className="btn btn-light" type="button">Sign Up</button>
+              </Link>
             </div>
           </div>
         </div>

@@ -14,8 +14,14 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
-    
-  }
-});
+
+  },
+
+  role: {
+    type: String,
+    enum: ["Citizen", "Admin", "Moderator"],
+    required: true
+  },
+}, { timestamps: true });
 const UserModel = mongoose.model('users', UserSchema);
-module.exports =UserModel;
+module.exports = UserModel;

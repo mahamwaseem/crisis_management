@@ -6,6 +6,7 @@ const SignupPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    role: '',
     password: '',
     confirmPassword: ''
   });
@@ -21,24 +22,25 @@ const SignupPage = () => {
       return;
     }
     // handle signup logic
-    try{
+    try {
       const res = await axios.post("http://localhost:5000/auth/signup", {
         name: formData.name,
         email: formData.email,
-        password:formData.password
+        role: formData.role,
+        password: formData.password
       });
-      if(res.data.success){
+      if (res.data.success) {
         alert("Signup Successful!");
         window.location.href = "/login";
-      }else{
+      } else {
         alert(res.data.message || "Signup failed!");
       }
-    }catch(err){
+    } catch (err) {
       console.error("Signup Error: ", err);
       alert("Something went wrong. Please try again!");
 
     }
-    
+
   };
 
   return (
@@ -71,6 +73,21 @@ const SignupPage = () => {
                 required
               />
             </div>
+            <div className="form-group">
+              <label>Role</label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select role</option>
+                <option value="Citizen">Citizen</option>
+                <option value="Admin">Admin</option>
+                <option value="Moderator">Moderator</option>
+              </select>
+            </div>
+
 
             <div className="form-group">
               <label>Password</label>

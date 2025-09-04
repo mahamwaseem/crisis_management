@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileText, CheckCircle, Clock, AlertTriangle, MapPin, Calendar } from 'lucide-react';
-import './ReportStatus.css';
+import '../styles/ReportStatus.css';
 
 const ReportStatus = ({ reports }) => {
   const getStatusIcon = (status) => {

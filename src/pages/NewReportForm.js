@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import './NewReportForm.css';
+import '../styles/NewReportForm.css';
 
 const NewReportForm = () => {
   const [formData, setFormData] = useState({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { User } from 'lucide-react';
-import './UserInfo.css';
+import '../styles/UserInfo.css';
 
 const UserInfo = ({ user }) => (
   <div className="user-card">

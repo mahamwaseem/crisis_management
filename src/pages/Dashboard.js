@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react';
 import UserInfo from './UserInfo';
 import ReportStatus from './ReportStatus';
 import NewReportForm from './NewReportForm';
-import "./Dashboard.css";
+import "../styles/Dashboard.css";
 
 // Mock data
 const mockUser = {

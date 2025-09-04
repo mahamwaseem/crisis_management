@@ -1,0 +1,63 @@
+.user-card {
+  background: linear-gradient(135deg, #f9fafb, #fee2e2);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+}
+
+
+
+.user-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.user-avatar {
+  background-color: #FFCC00; 
+  color: #ffffff;
+  padding: 0.75rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-title {
+  font-size: 1.5rem; 
+  font-weight: 700;
+  color: #1f2937; 
+}
+
+.user-subtitle {
+  color: #4b5563; 
+}
+
+.user-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .user-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.user-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.user-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280; 
+}
+
+.user-value {
+  color: #1f2937; 
+}

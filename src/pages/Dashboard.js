@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Bell } from 'lucide-react';
 import UserInfo from './UserInfo';
-import ReportStatus from './ReportStatus';
-import NewReportForm from './NewReportForm';
+import ReportStatus from '../myComponents/ReportStatus';
+import NewReportForm from '../myComponents/NewReportForm';
 import "../styles/Dashboard.css";
 
 // Mock data

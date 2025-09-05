@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Bell } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import { Bell, LogOut } from 'lucide-react';
 import UserInfo from './UserInfo';
 import ReportStatus from '../myComponents/ReportStatus';
 import NewReportForm from '../myComponents/NewReportForm';
@@ -48,10 +49,16 @@ const mockReports = [
 
 const CitizenDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate('/');
+  };
 
   return (
     <div className="citizen-dashboard">
-      
       {/* Header */}
       <header className="dashboard-header">
         <div className="header-container">
@@ -65,10 +72,41 @@ const CitizenDashboard = () => {
                 </div>
                 <span className="user-name">{mockUser.name}</span>
               </div>
+              <button
+                className="logout-btn"
+                onClick={() => setShowLogoutConfirm(true)}
+              >
+                <LogOut size={20} />
+                Logout
+              </button>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="logout-modal">
+          <div className="logout-modal-content">
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to logout?</p>
+            <div className="logout-actions">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="cancel-btn"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                className="confirm-btn"
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Navigation Tabs */}
       <div className="navigation-tabs">
@@ -101,7 +139,7 @@ const CitizenDashboard = () => {
         {activeTab === 'dashboard' && (
           <div className="dashboard-content">
             <UserInfo user={mockUser} />
-            
+
             <div className="stats-grid">
               <div className="stat-card">
                 <h3 className="stat-title">Total Reports</h3>
@@ -122,9 +160,8 @@ const CitizenDashboard = () => {
             </div>
           </div>
         )}
-        
+
         {activeTab === 'reports' && <ReportStatus reports={mockReports} />}
-        
         {activeTab === 'new-report' && <NewReportForm />}
       </main>
     </div>

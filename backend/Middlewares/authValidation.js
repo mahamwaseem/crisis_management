@@ -31,6 +31,20 @@ const loginValidation = (req, res, next) => {
   next();
 }
 
+const validateReport = (req, res, next) => {
+  const { error } = createReportSchema.validate(req.body);
+  
+  if (error) {
+    return res.status(400).json({
+      success: false,
+      message: 'Validation error',
+      details: error.details.map(detail => detail.message)
+    });
+  }
+  
+  next();
+};
+
 const updateProfileValidation = (req, res, next) => {
   const Schema = Joi.object({
     name: Joi.string().min(3).max(100).optional(),
@@ -53,5 +67,6 @@ const updateProfileValidation = (req, res, next) => {
 module.exports = {
   signupValidation,
   loginValidation,
-  updateProfileValidation
+  updateProfileValidation,
+  validateReport
 }

@@ -25,7 +25,7 @@ const createReport = async (req, res) => {
     await SavedReport.populate('userId', 'name email');
     res.status(201).json({success: true, data: SavedReport});
   }catch(err){
-    console.error('Error creating report: ', error);
+    console.error('Error creating report: ', err);
     res.status(500).json({
       success: false,
       message: "Server error while creating report"

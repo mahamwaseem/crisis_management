@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import '../styles/NewReportForm.css';
 
-const NewReportForm = () => {
+const NewReportForm = ({ onSubmitReport }) => {
   const [formData, setFormData] = useState({
     type: '',
     title: '',
@@ -38,8 +38,20 @@ const NewReportForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Report submitted:', formData);
-    alert('Report submitted successfully! You will receive a confirmation email shortly.');
+
+    // nayi report object banao
+    const newReport = {
+      id: `RPT${Date.now()}`, // unique id
+      ...formData,
+      status: 'Pending', // default status
+      date: new Date().toISOString().split("T")[0]
+    };
+
+    // parent ko bhejo
+    onSubmitReport(newReport);
+    alert('Report submitted successfully!');
+
+    // reset form
     setFormData({
       type: '',
       title: '',
@@ -56,7 +68,7 @@ const NewReportForm = () => {
         <Plus size={24} />
         File New Report
       </h3>
-      
+
       <div className="report-grid">
         <div className="form-group">
           <label className="form-label">Report Type *</label>
@@ -73,7 +85,7 @@ const NewReportForm = () => {
             ))}
           </select>
         </div>
-        
+
         <div className="form-group">
           <label className="form-label">Priority Level</label>
           <select

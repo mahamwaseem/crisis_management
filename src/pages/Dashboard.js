@@ -6,7 +6,7 @@ import ReportStatus from '../myComponents/ReportStatus';
 import NewReportForm from '../myComponents/NewReportForm';
 import "../styles/Dashboard.css";
 
-// Mock data
+// Mock user data
 const mockUser = {
   id: 'CIT001',
   name: 'Maham Waseem',
@@ -17,38 +17,38 @@ const mockUser = {
   memberSince: '2025-01-15'
 };
 
-const mockReports = [
-  {
-    id: 'RPT001',
-    type: 'Pothole',
-    title: 'Large pothole on Main Road',
-    status: 'In Progress',
-    priority: 'High',
-    date: '2024-08-15',
-    location: 'Main Road, Sector F-7'
-  },
-  {
-    id: 'RPT002',
-    type: 'Electricity Outage',
-    title: 'Power outage in residential area',
-    status: 'Resolved',
-    priority: 'Medium',
-    date: '2024-08-10',
-    location: 'Block A, F-7/1'
-  },
-  {
-    id: 'RPT003',
-    type: 'Water Issue',
-    title: 'Water leakage from main pipe',
-    status: 'Pending',
-    priority: 'High',
-    date: '2024-08-20',
-    location: 'Street 10, F-7/2'
-  }
-];
-
 const CitizenDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  // reports state
+  const [reports, setReports] = useState([
+    {
+      id: 'RPT001',
+      type: 'Pothole',
+      title: 'Large pothole on Main Road',
+      status: 'In Progress',
+      priority: 'High',
+      date: '2024-08-15',
+      location: 'Main Road, Sector F-7'
+    },
+    {
+      id: 'RPT002',
+      type: 'Electricity Outage',
+      title: 'Power outage in residential area',
+      status: 'Resolved',
+      priority: 'Medium',
+      date: '2024-08-10',
+      location: 'Block A, F-7/1'
+    }
+  ]);
+
+  // nayi report add karna
+  const handleAddReport = (newReport) => {
+    setReports((prev) => [...prev, newReport]);
+    setActiveTab("reports"); 
+  };
+
+  // logout confirm modal
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const navigate = useNavigate();
 
@@ -143,26 +143,26 @@ const CitizenDashboard = () => {
             <div className="stats-grid">
               <div className="stat-card">
                 <h3 className="stat-title">Total Reports</h3>
-                <p className="stat-value total">{mockReports.length}</p>
+                <p className="stat-value total">{reports.length}</p>
               </div>
               <div className="stat-card">
                 <h3 className="stat-title">Pending</h3>
                 <p className="stat-value pending">
-                  {mockReports.filter(r => r.status === 'Pending').length}
+                  {reports.filter(r => r.status === 'Pending').length}
                 </p>
               </div>
               <div className="stat-card">
                 <h3 className="stat-title">Resolved</h3>
                 <p className="stat-value resolved">
-                  {mockReports.filter(r => r.status === 'Resolved').length}
+                  {reports.filter(r => r.status === 'Resolved').length}
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        {activeTab === 'reports' && <ReportStatus reports={mockReports} />}
-        {activeTab === 'new-report' && <NewReportForm />}
+        {activeTab === 'reports' && <ReportStatus reports={reports} />}
+        {activeTab === 'new-report' && <NewReportForm onSubmitReport={handleAddReport} />}
       </main>
     </div>
   );

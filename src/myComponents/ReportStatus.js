@@ -46,37 +46,41 @@ const ReportStatus = ({ reports }) => {
     <div className="report-card">
       <h3 className="report-title">
         <FileText size={24} />
-         Reports Status
+        Reports Status
       </h3>
       
       <div className="report-list">
-        {reports.map((report) => (
-          <div key={report.id} className="report-item">
-            <div className="report-header">
-              <div className="report-info">
-                <h4>{report.title}</h4>
-                <p>Report ID: {report.id}</p>
-                <div className="report-meta">
-                  <MapPin size={14} />
-                  {report.location}
+        {reports.length > 0 ? (
+          reports.map((report) => (
+            <div key={report.id} className="report-item">
+              <div className="report-header">
+                <div className="report-info">
+                  <h4>{report.title}</h4>
+                  <p>Report ID: {report.id}</p>
+                  <div className="report-meta">
+                    <MapPin size={14} />
+                    {report.location}
+                  </div>
+                  <div className="report-meta">
+                    <Calendar size={14} />
+                    {report.date}
+                  </div>
                 </div>
-                <div className="report-meta">
-                  <Calendar size={14} />
-                  {report.date}
+                <div className="report-badges">
+                  {getStatusIcon(report.status)}
+                  <span className={getStatusClass(report.status)}>{report.status}</span>
+                  <span className={getPriorityClass(report.priority)}>{report.priority} Priority</span>
                 </div>
               </div>
-              <div className="report-badges">
-                {getStatusIcon(report.status)}
-                <span className={getStatusClass(report.status)}>{report.status}</span>
-                <span className={getPriorityClass(report.priority)}>{report.priority} Priority</span>
+              <div className="report-footer">
+                <span className="report-type">{report.type}</span>
+                <button className="report-btn">View Details</button>
               </div>
             </div>
-            <div className="report-footer">
-              <span className="report-type">{report.type}</span>
-              <button className="report-btn">View Details</button>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="no-reports">No reports submitted yet.</p>
+        )}
       </div>
     </div>
   );

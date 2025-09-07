@@ -18,9 +18,14 @@ const authMiddleware = async (req, res, next) => {
     }
     next();
   } catch (err) {
-    console.error(err);
-    res.status(401).json({ message: "Token is not valid" });
+  console.error(err);
+  if (err.name === "TokenExpiredError") {
+    return res.status(401).json({ message: "Token expired, please login again" });
   }
+  res.status(401).json({ message: "Token is not valid" });
+}
 };
+
+
 
 module.exports = authMiddleware;

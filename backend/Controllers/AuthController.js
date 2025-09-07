@@ -66,7 +66,15 @@ const login = async (req, res) => {
     res.status(500). json({ message: " Internal server error", success:false });
   }
 
-}
+};
+
+ const logout = async (req, res) => {
+  try{
+    return res.status(200).json({message: 'Logged out Successfully'});
+  }catch(err){
+    return res.status(401).json({message:'Logout failed',error:  err.message});
+  }
+ };
 
 const getProfile = async (req, res) => {
   try {
@@ -101,5 +109,6 @@ module.exports = {
   signup,
   login,
   getProfile,
-  updateProfile
+  updateProfile,
+  logout
 }

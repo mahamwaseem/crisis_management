@@ -42,13 +42,13 @@ const CitizenDashboard = () => {
     }
   ]);
 
-  // nayi report add karna
+  
   const handleAddReport = (newReport) => {
     setReports((prev) => [...prev, newReport]);
     setActiveTab("reports"); 
   };
 
-  // logout confirm modal
+  
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const navigate = useNavigate();
 
@@ -59,7 +59,6 @@ const CitizenDashboard = () => {
 
   return (
     <div className="citizen-dashboard">
-      {/* Header */}
       <header className="dashboard-header">
         <div className="header-container">
           <div className="header-content">
@@ -84,7 +83,7 @@ const CitizenDashboard = () => {
         </div>
       </header>
 
-      {/* Logout Confirmation Modal */}
+      
       {showLogoutConfirm && (
         <div className="logout-modal">
           <div className="logout-modal-content">
@@ -108,7 +107,7 @@ const CitizenDashboard = () => {
         </div>
       )}
 
-      {/* Navigation Tabs */}
+      
       <div className="navigation-tabs">
         <div className="tabs-container">
           <div className="tabs-list">
@@ -134,7 +133,7 @@ const CitizenDashboard = () => {
         </div>
       </div>
 
-      {/* Main Content */}
+      
       <main className="main-content">
         {activeTab === 'dashboard' && (
           <div className="dashboard-content">

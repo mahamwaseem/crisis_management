@@ -48,12 +48,38 @@ const getReports = async (req, res) => {
 
     res.status(200).json({ success: true, count: reports.length, data: reports });
   } catch (err) {
-    console.log(" Error fetching report");
+    console.log(" Error fetching report", err);
     res.status(500).json({ success: false, message: 'Server error while fetching reports' });
+  }
+};
+
+const getReportById = async (req, res) => {
+  try{
+    const { id } = req.params;
+
+    const report = await ReportModel.findById(id)
+    .populate("userId", "name email role");
+
+    if(!report){
+      return res.status(404).json({ success: false, message: "Report not found"});
+    }
+
+    if(req.user.role === 'Citizen' && report.userId._id.toString() !== req.user.id ){
+      return res.status(403).json({success: false, message: " You are not authorized to view this report"});
+    }
+
+    res.status(200).json({
+      success: true,
+      data: report
+    });
+  }catch(err){
+    console.log('Error fetching report', err);
+    res.status(500).json({ success: false, message: err.message || "Server error while fetching report details"})
   }
 };
 
 module.exports = {
   createReport,
-  getReports
+  getReports,
+  getReportById
 }

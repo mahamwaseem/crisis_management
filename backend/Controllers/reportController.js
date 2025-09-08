@@ -113,9 +113,43 @@ const updateReport = async (req, res) => {
   }
 };
 
+const deleteReport = async(req, res) => {
+  try{
+    const {id} = req.params;
+
+    const report = await ReportModel.findById(id);
+
+    if(!report){
+      return res.status(404).json({ success : false, message: 'Report not found'});
+    }
+
+    if(req.user.role === 'Citizen' && report.userId.toString() !== req.user.id){
+      return res.status(403).json({
+        success: false,
+        message: " You are not authorized to delete this report"
+      });
+    }
+
+    await report.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: 'Report deletes successfully'
+    });
+
+  }catch(err){
+    console.log('Error deleting report', err);
+    res.status(500).json({
+      success: false,
+      message: err.message || " Server error while deleting report"
+    });
+  }
+};
+
 module.exports = {
   createReport,
   getReports,
   getReportById,
-  updateReport
+  updateReport, 
+  deleteReport
 }

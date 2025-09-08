@@ -54,32 +54,68 @@ const getReports = async (req, res) => {
 };
 
 const getReportById = async (req, res) => {
-  try{
+  try {
     const { id } = req.params;
 
     const report = await ReportModel.findById(id)
-    .populate("userId", "name email role");
+      .populate("userId", "name email role");
 
-    if(!report){
-      return res.status(404).json({ success: false, message: "Report not found"});
+    if (!report) {
+      return res.status(404).json({ success: false, message: "Report not found" });
     }
 
-    if(req.user.role === 'Citizen' && report.userId._id.toString() !== req.user.id ){
-      return res.status(403).json({success: false, message: " You are not authorized to view this report"});
+    if (req.user.role === 'Citizen' && report.userId._id.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: " You are not authorized to view this report" });
     }
 
     res.status(200).json({
       success: true,
       data: report
     });
-  }catch(err){
+  } catch (err) {
     console.log('Error fetching report', err);
-    res.status(500).json({ success: false, message: err.message || "Server error while fetching report details"})
+    res.status(500).json({ success: false, message: err.message || "Server error while fetching report details" })
+  }
+};
+
+const updateReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let report = await ReportModel.findById(id)
+
+    if (!report) {
+      return res.status(404).json({ success: false, message: "Report not found" });
+    }
+
+    if (req.user.role === 'Citizen' && report.userId.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You are not authorized to update this report' });
+    }
+
+    const allowUpdates = ["title", "descripyion", "category", "location", "media"];
+    if (req.user.role !== 'Citizen') {
+      allowUpdates.push("status");
+    }
+
+    allowUpdates.forEach(field => {
+      if (req.body[field] !== undefined) {
+        report[field] = req.body[field];
+      }
+    });
+
+    await report.save();
+    await report.populate("userId", " name, email, role");
+
+    res.status(200).json({ success: true, message: 'Report Updates Successfully', data: report });
+  } catch (err) {
+    console.log('Error updating report', err);
+    res.status(500).json({ success: false, message: err.message || "Server error while updating report" });
   }
 };
 
 module.exports = {
   createReport,
   getReports,
-  getReportById
+  getReportById,
+  updateReport
 }

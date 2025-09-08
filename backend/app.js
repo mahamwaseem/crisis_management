@@ -14,6 +14,8 @@ app.use(express.json());
 app.use(cors());
 app.use('/auth', AuthRouter);
 app.use('/report', ReportRouter);
+app.use("/uploads", express.static("uploads"));
+
 
 
 module. exports = app;

@@ -21,7 +21,7 @@ const ReportSchema = new mongoose.Schema({
 
   category: {
     type: String,
-    enum: ["Road", "Corruption", "Flood", "Electricity", "Other"],
+    enum: ["Road", "Corruption", "Flood", "Electricity", "Fire", "Earthquake", "Landslide", "Other"],
     required: true,
   },
 

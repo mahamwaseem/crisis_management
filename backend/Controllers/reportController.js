@@ -1,4 +1,5 @@
 const ReportModel = require('../models/Report');
+const User = require('../models/users');
 
 const createReport = async (req, res) => {
   try{

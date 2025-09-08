@@ -39,15 +39,15 @@ const NewReportForm = ({ onSubmitReport }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // nayi report object banao
+    
     const newReport = {
-      id: `RPT${Date.now()}`, // unique id
+      id: `RPT${Date.now()}`, 
       ...formData,
       status: 'Pending', // default status
       date: new Date().toISOString().split("T")[0]
     };
 
-    // parent ko bhejo
+    
     onSubmitReport(newReport);
     alert('Report submitted successfully!');
 

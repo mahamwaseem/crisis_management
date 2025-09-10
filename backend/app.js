@@ -21,4 +21,4 @@ app.use('/comment', commentRoutes);
 
 
 
-module. exports = app;
+module.exports = app;

@@ -29,3 +29,7 @@ const addComment = async(req, res) => {
     });
   }
 };
+
+module.exports = {
+  addComment
+}

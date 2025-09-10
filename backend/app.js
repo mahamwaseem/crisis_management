@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require('cors');
 const AuthRouter = require('./routes/authRouter');
 const ReportRouter = require('./routes/reportRoutes');
+const commentRoutes = require('./routes/commentRoutes')
 
 
 const connectDB = require ("./config/db");
@@ -15,6 +16,8 @@ app.use(cors());
 app.use('/auth', AuthRouter);
 app.use('/report', ReportRouter);
 app.use("/uploads", express.static("uploads"));
+
+app.use('/comment', commentRoutes);
 
 
 

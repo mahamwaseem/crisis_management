@@ -175,14 +175,81 @@ const addMediaToReport = async (req, res) => {
       message: "Media uploaded successfully",
       data: report,
     });
-  } catch(err){
+  } catch (err) {
     console.log("Error uploading media", err);
     res.status(500).json({
-      success:false,
-      message: err.message||"Server error while  uploading media ",
+      success: false,
+      message: err.message || "Server error while  uploading media ",
     });
   }
-;}
+};
+
+const getNearByReport = async (req, res) => {
+  try {
+    const { lat, lng, distance = 5000 } = req.query;
+
+    if (!lat || !lng) {
+      return res.status(400).json({
+        success: false,
+        message: "Latitude and Langitutde are required"
+      });
+    }
+
+    const report = await ReportModel.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+          },
+          distanceField: "dist.calculated",
+          maxDistance: parseInt(distance),
+          spherical: true
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+      },
+     },
+
+     {
+      $unwind: "$user"
+     },
+
+     {
+      $project: {
+        title: 1,
+        description: 1,
+        category: 1,
+        status: 1,
+        location: 1,
+        media: 1,
+        createdAt : 1,
+        "user.name" : 1,
+        "user.email" : 1,
+        "dist.calculated": 1
+
+      }
+     }
+ ]);
+ res.status(200).json({
+  success: true,
+  count: report.length,
+  data: report
+ });
+
+  }catch(err){
+    console.error("Error fetching nearby reports", err);
+    res.status(500).json({
+      success: false,
+      message:" Server error while fetching nearby reports"
+    });
+  }
+};
 
 module.exports = {
   createReport,
@@ -190,5 +257,6 @@ module.exports = {
   getReportById,
   updateReport,
   deleteReport,
-  addMediaToReport
+  addMediaToReport,
+  getNearByReport
 }

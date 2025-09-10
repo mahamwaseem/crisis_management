@@ -30,6 +30,29 @@ const addComment = async(req, res) => {
   }
 };
 
+const getComments = async(req, res) => {
+  try{
+    const {reportId} = req.params;
+
+    const comments = await Comment.find({ reportId })
+    .populate("userId", "name email")
+    .sort({createdAt: -1});
+
+    res.status(200).json({
+      success : true,
+      count: comments.length,
+      data: comments
+    });
+  }catch(err){
+    console.error("Error fetching comments", err);
+    res.status(500).json({
+      success: false,
+      message:"Server Error while fetching comments"
+    });
+  }
+};
+
 module.exports = {
-  addComment
+  addComment,
+  getComments
 }

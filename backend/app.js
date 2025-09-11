@@ -4,7 +4,8 @@ const cors = require('cors');
 const AuthRouter = require('./routes/authRouter');
 const ReportRouter = require('./routes/reportRoutes');
 const commentRoutes = require('./routes/commentRoutes');
-const notificationRoutes = require('./routes/notificationRoutes')
+const notificationRoutes = require('./routes/notificationRoutes');
+const adminRoutes = require("./routes/adminRoutes");
 const { initSocket } = require("./utils/socket");
 const connectDB = require("./config/db");
 
@@ -24,6 +25,7 @@ app.use('/auth', AuthRouter);
 app.use('/report', ReportRouter);
 app.use("/uploads", express.static("uploads"));
 app.use('/comment', commentRoutes);
-app.use('/notification', notificationRoutes)
+app.use('/notification', notificationRoutes);
+app.use("/admin", adminRoutes);
 
 module.exports = app;

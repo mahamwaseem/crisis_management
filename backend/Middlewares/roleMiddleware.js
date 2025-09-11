@@ -1,25 +1,26 @@
-// roleMiddleware.js
-const roleMiddleware = (roles) => {
+const roleMiddleware = (allowedRoles = []) => {
   return (req, res, next) => {
-    // Check if user exists and has role
+    
     if (!req.user) {
-      return res.status(401).json({ message: "Authentication required.", success: false });
+      return res.status(401).json({ success: false, message: "Authentication required." });
     }
+
     
     if (!req.user.role) {
-      return res.status(403).json({ message: "User role not found.", success: false });
+      return res.status(403).json({ success: false, message: "User role not found." });
     }
+
     
-    // Convert single role to array for consistency
-    const allowedRoles = Array.isArray(roles) ? roles : [roles];
+    const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
+
     
-    if (!allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ 
-        message: `Access denied. Required role: ${allowedRoles.join(' or ')}. Your role: ${req.user.role}`, 
-        success: false 
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Access denied. Required: ${roles.join(" or ")} | Your role: ${req.user.role}`
       });
     }
-    
+
     next();
   };
 };

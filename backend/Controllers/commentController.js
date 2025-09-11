@@ -52,7 +52,29 @@ const getComments = async(req, res) => {
   }
 };
 
+const deleteComment = async(req, res) => {
+   try {
+    const { id } = req.params;
+
+    const comment = await Comment.findById(id);
+    if (!comment) {
+      return res.status(404).json({ success: false, message: "Comment not found" });
+    }
+
+    if (comment.userId.toString() !== req.user.id && req.user.role !== "Admin") {
+      return res.status(403).json({ success: false, message: "Not authorized to delete this comment" });
+    }
+
+    await comment.deleteOne();
+    res.status(200).json({ success: true, message: "Comment deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting comment:", err);
+    res.status(500).json({ success: false, message: "Server error while deleting comment" });
+  }
+};
+
 module.exports = {
   addComment,
-  getComments
+  getComments,
+  deleteComment
 }

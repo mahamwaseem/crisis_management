@@ -3,22 +3,27 @@ require("dotenv").config();
 const cors = require('cors');
 const AuthRouter = require('./routes/authRouter');
 const ReportRouter = require('./routes/reportRoutes');
-const commentRoutes = require('./routes/commentRoutes')
-
-
-const connectDB = require ("./config/db");
+const commentRoutes = require('./routes/commentRoutes');
+const notificationRoutes = require('./routes/notificationRoutes')
+const { initSocket } = require("./utils/socket");
+const connectDB = require("./config/db");
 
 const app = express();
 connectDB();
 
+const http = require("http");
+const server = http.createServer(app);
+initSocket(server); 
+
+// middlewares
 app.use(express.json());
 app.use(cors());
+
+// routes
 app.use('/auth', AuthRouter);
 app.use('/report', ReportRouter);
 app.use("/uploads", express.static("uploads"));
-
 app.use('/comment', commentRoutes);
-
-
+app.use('/notification', notificationRoutes)
 
 module.exports = app;

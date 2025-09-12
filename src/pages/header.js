@@ -7,7 +7,7 @@ export default function Header() {
     <div>
       <nav className="navbar navbar-expand-lg custom-navbar">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">R2R</a>
+          <a className="navbar-brand" to="/">R2R</a>
           <button
             className="navbar-toggler"
             type="button"
@@ -22,7 +22,7 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">Home</a>
+                <a className="nav-link active" aria-current="page" to="/">Home</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#about">About</a>

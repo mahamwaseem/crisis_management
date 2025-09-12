@@ -23,16 +23,33 @@ const LoginPage = () => {
 
       if (res.data.success) {
         alert('Login Successful!');
+        
+        
         localStorage.setItem("token", res.data.jwtToken);
-        window.location.href = "/Dashboard";
+        localStorage.setItem("userRole", res.data.role || res.data.user?.role);
+        localStorage.setItem("userName", res.data.user?.name || res.data.name);
+        localStorage.setItem("userEmail", res.data.user?.email || res.data.email);
+        
+        
+        const userRole = res.data.role || res.data.user?.role;
+        
+        if (userRole === 'Admin') {
+          window.location.href = "/admin-dashboard";
+        } else if (userRole === 'Citizen') {
+          window.location.href = "/Dashboard";
+        } else {
+         
+          window.location.href = "/";
+        }
       } else {
-        alert(res.data.message || "Login failed!")
+        alert(res.data.message || "Login failed!");
       }
     } catch (err) {
       console.log("Login error: ", err);
-      alert("Something went wrong.Please try again!")
+      alert("Something went wrong. Please try again!");
     }
   };
+
   return (
     <div className="login-page">
       <div className="login-overlay"></div>

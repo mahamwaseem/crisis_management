@@ -16,10 +16,22 @@ const UserSchema = new Schema({
     required: true,
 
   },
+  phone: { 
+    type: String,
+    required: true, 
+  },
+  cnic: { 
+    type: String,
+    required: true, 
+  },
+  address: {
+     type: String,
+     required: true, 
+    },
 
   role: {
     type: String,
-    enum: ["Citizen", "Admin", "Moderator"],
+    enum: ["Citizen", "Admin"],
     required: true
   },
 }, { timestamps: true });

@@ -4,32 +4,53 @@ const UserModel = require("../models/users")
 
 const signup = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, phone, address, cnic } = req.body;
 
-    const user = await UserModel.findOne({ email });
-    if (user) {
-      return res.status(409).json({ message: 'User is already exist,You can login', success: false });
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ 
+        message: 'User already exists, you can login', 
+        success: false 
+      });
     }
+    const userModel = new UserModel({
+      name,
+      email,
+      password,
+      role,
+      phone,
+      address,
+      cnic
+    });
 
-    const userModel = new UserModel({ name, email, password, role});
+   
     userModel.password = await bcrypt.hash(password, 10);
     await userModel.save();
 
-      res.status(201). json({ message: " Signup successfully", success:true, 
-        user: {
-        id: userModel._id,        
-        name: userModel.name,     
-        email: userModel.email,   
-        role: userModel.role,     
+   
+    res.status(201).json({ 
+      message: "Signup successful", 
+      success: true,
+      user: {
+        id: userModel._id,
+        name: userModel.name,
+        email: userModel.email,
+        role: userModel.role,
+        phone: userModel.phone,
+        address: userModel.address,
+        cnic: userModel.cnic,
         createdAt: userModel.createdAt
-      }});
+      }
+    });
+  } catch (err) { 
+    console.error("Signup Error:", err); 
+    res.status(500).json({ 
+      message: "Internal server error", 
+      success: false 
+    });
   }
-  catch(err) { 
-    console.error(" Signup Error:", err); 
-    res.status(500). json({ message: " Internal server error", success:false });
-  }
+};
 
-}
 
 const login = async (req, res) => {
   try {
@@ -78,13 +99,22 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.user._id).select("-password");
-    if (!user) {
-      return res.status(404).json({ message: "User not found", success: false });
-    }
-    res.status(200).json({ success: true, user });
+    const user = await UserModel.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone || "N/A",
+      cnic: user.cnic || "N/A",
+      address: user.address || "N/A",
+      role: user.role,
+      memberSince: user.createdAt,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Internal server error", success: false });
+    console.error("Profile error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

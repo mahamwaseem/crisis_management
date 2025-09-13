@@ -5,18 +5,22 @@ const signupValidation = (req, res, next) => {
     name: Joi.string().min(3).max(100).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(4).max(100).required(),
-    role: Joi.string().valid("Citizen", "Admin", "Moderator").optional().default("Citizen"), 
+    role: Joi.string().valid("Citizen", "Admin", "Moderator").optional().default("Citizen"),
+    phone: Joi.string().pattern(/^[0-9]{10,15}$/).optional(), // 10–15 digit phone number
+    address: Joi.string().max(200).optional(),
+    cnic: Joi.string().pattern(/^[0-9]{13}$/).optional(), // 13 digits CNIC
   });
 
-  const { error, value } = Schema.validate(req.body); // Get validated value too
-  
-  if(error){
-    return res.status(400).json({message:"Bad request", error});
+  const { error, value } = Schema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({ message: "Bad request", error });
   }
-  
-  req.body = value; // Use validated and defaulted values
+
+  req.body = value; 
   next();
-}
+};
+
 
 const loginValidation = (req, res, next) => {
   const Schema = Joi.object({

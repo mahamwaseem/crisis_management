@@ -7,6 +7,9 @@ const SignupPage = () => {
     name: '',
     email: '',
     role: '',
+    phone: '',
+    address: '',
+    cnic: '',
     password: '',
     confirmPassword: ''
   });
@@ -21,12 +24,14 @@ const SignupPage = () => {
       alert("Passwords do not match!");
       return;
     }
-    // handle signup logic
     try {
       const res = await axios.post("http://localhost:3000/auth/signup", {
         name: formData.name,
         email: formData.email,
         role: formData.role,
+        phone: formData.phone,
+        address: formData.address,
+        cnic: formData.cnic,
         password: formData.password
       });
       if (res.data.success) {
@@ -38,9 +43,7 @@ const SignupPage = () => {
     } catch (err) {
       console.error("Signup Error: ", err);
       alert("Something went wrong. Please try again!");
-
     }
-
   };
 
   return (
@@ -50,6 +53,7 @@ const SignupPage = () => {
         <div className="signup-card">
           <h2>Create Account</h2>
           <form onSubmit={handleSubmit}>
+            {/* Name */}
             <div className="form-group">
               <label>Name</label>
               <input
@@ -62,6 +66,7 @@ const SignupPage = () => {
               />
             </div>
 
+            {/* Email */}
             <div className="form-group">
               <label>Email</label>
               <input
@@ -73,6 +78,47 @@ const SignupPage = () => {
                 required
               />
             </div>
+
+            {/* Phone */}
+            <div className="form-group">
+              <label>Phone</label>
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Enter your phone number"
+                required
+              />
+            </div>
+
+            {/* Address */}
+            <div className="form-group">
+              <label>Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter your address"
+                required
+              />
+            </div>
+
+            {/* CNIC */}
+            <div className="form-group">
+              <label>CNIC</label>
+              <input
+                type="text"
+                name="cnic"
+                value={formData.cnic}
+                onChange={handleChange}
+                placeholder="Enter your CNIC"
+                required
+              />
+            </div>
+
+            {/* Role */}
             <div className="form-group">
               <label>Role</label>
               <select
@@ -87,7 +133,7 @@ const SignupPage = () => {
               </select>
             </div>
 
-
+            {/* Password */}
             <div className="form-group">
               <label>Password</label>
               <input
@@ -100,6 +146,7 @@ const SignupPage = () => {
               />
             </div>
 
+            {/* Confirm Password */}
             <div className="form-group">
               <label>Confirm Password</label>
               <input

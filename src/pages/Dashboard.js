@@ -1,57 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Bell, LogOut } from 'lucide-react';
 import UserInfo from './UserInfo';
 import ReportStatus from '../myComponents/ReportStatus';
 import NewReportForm from '../myComponents/NewReportForm';
 import "../styles/Dashboard.css";
-
-// Mock user data
-const mockUser = {
-  id: 'CIT001',
-  name: 'Maham Waseem',
-  email: 'maham.waseem@email.com',
-  phone: '+92-300-1234567',
-  address: 'Street 15, F-7 Markaz, Islamabad',
-  cnic: '12345-6789012-3',
-  memberSince: '2025-01-15'
-};
+import axios from "../api/axiosConfig";
 
 const CitizenDashboard = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
-
-  // reports state
-  const [reports, setReports] = useState([
-    {
-      id: 'RPT001',
-      type: 'Pothole',
-      title: 'Large pothole on Main Road',
-      status: 'In Progress',
-      priority: 'High',
-      date: '2024-08-15',
-      location: 'Main Road, Sector F-7'
-    },
-    {
-      id: 'RPT002',
-      type: 'Electricity Outage',
-      title: 'Power outage in residential area',
-      status: 'Resolved',
-      priority: 'Medium',
-      date: '2024-08-10',
-      location: 'Block A, F-7/1'
-    }
-  ]);
-
-  
-  const handleAddReport = (newReport) => {
-    setReports((prev) => [...prev, newReport]);
-    setActiveTab("reports"); 
-  };
-
-  
+  const [user, setUser] = useState(null);
+  const [reports, setReports] = useState([]);
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   const navigate = useNavigate();
 
+  // ✅ User profile fetch
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("/auth/profile", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        });
+        setUser(res.data);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // ✅ Reports fetch
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const res = await axios.get("/report/my", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        });
+        setReports(res.data);
+      } catch (err) {
+        console.error("Error fetching reports:", err);
+      }
+    };
+    fetchReports();
+  }, []);
+
+  // ✅ Add new report
+  const handleAddReport = (newReport) => {
+    setReports((prev) => [...prev, newReport]);
+    setActiveTab("reports");
+  };
+
+  // ✅ Logout
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate('/');
@@ -65,12 +65,14 @@ const CitizenDashboard = () => {
             <h1 className="header-title">Citizen Portal</h1>
             <div className="header-actions">
               <Bell className="notification-bell" size={20} />
-              <div className="user-info">
-                <div className="user-avatar">
-                  {mockUser.name.split(' ').map(n => n[0]).join('')}
+              {user && (
+                <div className="user-info">
+                  <div className="user-avatar">
+                    {user.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <span className="user-name">{user.name}</span>
                 </div>
-                <span className="user-name">{mockUser.name}</span>
-              </div>
+              )}
               <button
                 className="logout-btn"
                 onClick={() => setShowLogoutConfirm(true)}
@@ -90,16 +92,10 @@ const CitizenDashboard = () => {
             <h2>Confirm Logout</h2>
             <p>Are you sure you want to logout?</p>
             <div className="logout-actions">
-              <button
-                onClick={() => setShowLogoutConfirm(false)}
-                className="cancel-btn"
-              >
+              <button onClick={() => setShowLogoutConfirm(false)} className="cancel-btn">
                 Cancel
               </button>
-              <button
-                onClick={handleLogout}
-                className="confirm-btn"
-              >
+              <button onClick={handleLogout} className="confirm-btn">
                 Yes, Logout
               </button>
             </div>
@@ -137,7 +133,8 @@ const CitizenDashboard = () => {
       <main className="main-content">
         {activeTab === 'dashboard' && (
           <div className="dashboard-content">
-            <UserInfo user={mockUser} />
+           
+            {user ? <UserInfo user={user} /> : <p>Loading user info...</p>}
 
             <div className="stats-grid">
               <div className="stat-card">

@@ -6,7 +6,6 @@ const ReportRouter = require('./routes/reportRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require("./routes/adminRoutes");
-const userRoutes = require("./routes/userRoutes"); 
 const { initSocket } = require("./utils/socket");
 const connectDB = require("./config/db");
 
@@ -28,7 +27,6 @@ app.use("/uploads", express.static("uploads"));
 app.use('/comment', commentRoutes);
 app.use('/notification', notificationRoutes);
 app.use("/admin", adminRoutes);
-app.use("/user", userRoutes);
 
 
 module.exports = app;

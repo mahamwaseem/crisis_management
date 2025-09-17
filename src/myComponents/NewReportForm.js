@@ -4,27 +4,21 @@ import "../styles/NewReportForm.css";
 
 const NewReportForm = ({ onSubmitReport }) => {
   const [formData, setFormData] = useState({
-    type: "",
+    category: "",
     title: "",
     description: "",
     location: "",
-    priority: "Medium",
-    attachments: null,
+    media: null,
   });
 
   const reportTypes = [
-    "Flooding",
-    "Electricity Outage",
+    "Road",
     "Corruption",
-    "Pothole",
-    "Crime",
-    "Water Issue",
-    "Garbage Collection",
-    "Street Light",
-    "Sewerage Problem",
-    "Traffic Issue",
-    "Building Violation",
-    "Noise Pollution",
+    "Flood",
+    "Electricity",
+    "Fire",
+    "Earthquake",
+    "Landslide",
     "Other",
   ];
 
@@ -38,48 +32,76 @@ const NewReportForm = ({ onSubmitReport }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("Please login first.");
+        window.location.href = "/login";
+        return;
+      }
+
       
       const pos = await new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
       );
       const { latitude, longitude } = pos.coords;
 
+    
+      const jsonPayload = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        location: { type: "Point", coordinates: [longitude, latitude] },
+      };
+
+      const createRes = await fetch("http://localhost:3000/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(jsonPayload),
+      });
+
+      const created = await createRes.json();
+      if (!createRes.ok) throw created;
+
       
-      const payload = new FormData();
-      payload.append("title", formData.title);
-      payload.append("description", formData.description);
-      payload.append("type", formData.type);
-      payload.append("priority", formData.priority);
-      if (formData.attachments) {
-        payload.append("attachments", formData.attachments);
+      if (formData.media) {
+        const form = new FormData();
+        form.append("media", formData.media);
+
+        const uploadRes = await fetch(
+          `http://localhost:3000/report/${created.data._id}/media`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            },
+            body: form,
+          }
+        );
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw uploadData;
       }
-      payload.append(
-        "location",
-        JSON.stringify({
-          type: "Point",
-          coordinates: [longitude, latitude],
-          address: formData.location, 
-        })
-      );
 
       alert("Report submitted successfully!");
+      if (onSubmitReport) onSubmitReport(created.data);
 
-      alert("Report submitted successfully!");
-    setFormData({
-      type: "",
-      title: "",
-      description: "",
-      location: "",
-      priority: "Medium",
-      attachments: null,
-    });
-  } catch (err) {
-    console.error("Error submitting report:", err.response?.data || err);
-    alert("Failed to submit report");
-  }
-};
+   
+      setFormData({
+        category: "",
+        title: "",
+        description: "",
+        location: "",
+        media: null,
+      });
+    } catch (err) {
+      console.error("Error submitting report:", err);
+      alert(err.message || "Failed to submit report");
+    }
+  };
 
   return (
     <form className="report-form" onSubmit={handleSubmit}>
@@ -92,8 +114,8 @@ const NewReportForm = ({ onSubmitReport }) => {
         <div className="form-group">
           <label className="form-label">Report Type *</label>
           <select
-            name="type"
-            value={formData.type}
+            name="category"
+            value={formData.category}
             onChange={handleInputChange}
             required
             className="form-select"
@@ -104,21 +126,6 @@ const NewReportForm = ({ onSubmitReport }) => {
                 {type}
               </option>
             ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Priority Level</label>
-          <select
-            name="priority"
-            value={formData.priority}
-            onChange={handleInputChange}
-            className="form-select"
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-            <option value="Emergency">Emergency</option>
           </select>
         </div>
       </div>
@@ -166,7 +173,7 @@ const NewReportForm = ({ onSubmitReport }) => {
         <label className="form-label">Attach Evidence (Optional)</label>
         <input
           type="file"
-          name="attachments"
+          name="media"
           onChange={handleInputChange}
           accept="image/*,video/*,.pdf,.doc,.docx"
           className="form-file"
@@ -177,7 +184,6 @@ const NewReportForm = ({ onSubmitReport }) => {
       </div>
 
       <div className="form-actions">
-        
         <button type="submit" className="btn btn-submit">
           Submit Report
         </button>

@@ -52,28 +52,37 @@ const ReportStatus = ({ reports }) => {
       <div className="report-list">
         {reports.length > 0 ? (
           reports.map((report) => (
-            <div key={report.id} className="report-item">
+            <div key={report._id} className="report-item">
               <div className="report-header">
                 <div className="report-info">
                   <h4>{report.title}</h4>
-                  <p>Report ID: {report.id}</p>
+                  <p>Report ID: {report._id}</p>
+
+                  {/* Location ko readable banaya */}
                   <div className="report-meta">
                     <MapPin size={14} />
-                    {report.location}
+                    {report.location?.coordinates
+                      ? `Lat: ${report.location.coordinates[1]}, Lng: ${report.location.coordinates[0]}`
+                      : "Not Available"}
                   </div>
+
                   <div className="report-meta">
                     <Calendar size={14} />
-                    {report.date}
+                    {new Date(report.createdAt).toLocaleString()}
                   </div>
                 </div>
+
                 <div className="report-badges">
                   {getStatusIcon(report.status)}
                   <span className={getStatusClass(report.status)}>{report.status}</span>
-                  <span className={getPriorityClass(report.priority)}>{report.priority} Priority</span>
+                  <span className={getPriorityClass(report.priority || "Low")}>
+                    {report.priority || "Low"} Priority
+                  </span>
                 </div>
               </div>
+
               <div className="report-footer">
-                <span className="report-type">{report.type}</span>
+                <span className="report-type">{report.category}</span>
                 <button className="report-btn">View Details</button>
               </div>
             </div>

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Bell, LogOut } from 'lucide-react';
 import UserInfo from './UserInfo';
+import axios from "../api/axiosConfig"; 
 import ReportStatus from '../myComponents/ReportStatus';
 import NewReportForm from '../myComponents/NewReportForm';
 import "../styles/Dashboard.css";
-import axios from "../api/axiosConfig";
+
 
 const CitizenDashboard = () => {
   const [user, setUser] = useState(null);
@@ -15,7 +16,6 @@ const CitizenDashboard = () => {
 
   const navigate = useNavigate();
 
-  // ✅ User profile fetch
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -30,14 +30,13 @@ const CitizenDashboard = () => {
     fetchUser();
   }, []);
 
-  // ✅ Reports fetch
-  useEffect(() => {
+    useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await axios.get("/report/my", {
+        const res = await axios.get("/report", {
           headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
         });
-        setReports(res.data);
+        setReports(Array.isArray(res.data) ? res.data : res.data.reports || []);
       } catch (err) {
         console.error("Error fetching reports:", err);
       }
@@ -45,13 +44,11 @@ const CitizenDashboard = () => {
     fetchReports();
   }, []);
 
-  // ✅ Add new report
   const handleAddReport = (newReport) => {
     setReports((prev) => [...prev, newReport]);
     setActiveTab("reports");
   };
 
-  // ✅ Logout
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate('/');

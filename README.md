@@ -33,4 +33,7 @@ npm install react-router-dom
 
 npm install multer
 
+npm install recharts
+
+
 

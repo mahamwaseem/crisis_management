@@ -25,7 +25,7 @@ const LoginPage = () => {
         alert('Login Successful!');
         
         
-        localStorage.setItem("token", res.data.jwtToken);
+        localStorage.setItem("authToken", res.data.jwtToken);
         localStorage.setItem("userRole", res.data.role || res.data.user?.role);
         localStorage.setItem("userName", res.data.user?.name || res.data.name);
         localStorage.setItem("userEmail", res.data.user?.email || res.data.email);

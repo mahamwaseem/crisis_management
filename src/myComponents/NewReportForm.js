@@ -1,69 +1,88 @@
-import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
-import '../styles/NewReportForm.css';
+import React, { useState } from "react";
+import { Plus } from "lucide-react";
+import "../styles/NewReportForm.css";
 
 const NewReportForm = ({ onSubmitReport }) => {
   const [formData, setFormData] = useState({
-    type: '',
-    title: '',
-    description: '',
-    location: '',
-    priority: 'Medium',
-    attachments: null
+    type: "",
+    title: "",
+    description: "",
+    location: "",
+    priority: "Medium",
+    attachments: null,
   });
 
   const reportTypes = [
-    'Flooding',
-    'Electricity Outage',
-    'Corruption',
-    'Pothole',
-    'Crime',
-    'Water Issue',
-    'Garbage Collection',
-    'Street Light',
-    'Sewerage Problem',
-    'Traffic Issue',
-    'Building Violation',
-    'Noise Pollution',
-    'Other'
+    "Flooding",
+    "Electricity Outage",
+    "Corruption",
+    "Pothole",
+    "Crime",
+    "Water Issue",
+    "Garbage Collection",
+    "Street Light",
+    "Sewerage Problem",
+    "Traffic Issue",
+    "Building Violation",
+    "Noise Pollution",
+    "Other",
   ];
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: files ? files[0] : value
+      [name]: files ? files[0] : value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
-    const newReport = {
-      id: `RPT${Date.now()}`, 
-      ...formData,
-      status: 'Pending', // default status
-      date: new Date().toISOString().split("T")[0]
-    };
+    try {
+      
+      const pos = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+      );
+      const { latitude, longitude } = pos.coords;
 
-    
-    onSubmitReport(newReport);
-    alert('Report submitted successfully!');
+      
+      const payload = new FormData();
+      payload.append("title", formData.title);
+      payload.append("description", formData.description);
+      payload.append("type", formData.type);
+      payload.append("priority", formData.priority);
+      if (formData.attachments) {
+        payload.append("attachments", formData.attachments);
+      }
+      payload.append(
+        "location",
+        JSON.stringify({
+          type: "Point",
+          coordinates: [longitude, latitude],
+          address: formData.location, 
+        })
+      );
 
-    // reset form
+      alert("Report submitted successfully!");
+
+      alert("Report submitted successfully!");
     setFormData({
-      type: '',
-      title: '',
-      description: '',
-      location: '',
-      priority: 'Medium',
-      attachments: null
+      type: "",
+      title: "",
+      description: "",
+      location: "",
+      priority: "Medium",
+      attachments: null,
     });
-  };
+  } catch (err) {
+    console.error("Error submitting report:", err.response?.data || err);
+    alert("Failed to submit report");
+  }
+};
 
   return (
-    <div className="report-form">
+    <form className="report-form" onSubmit={handleSubmit}>
       <h3 className="report-form-title">
         <Plus size={24} />
         File New Report
@@ -81,7 +100,9 @@ const NewReportForm = ({ onSubmitReport }) => {
           >
             <option value="">Select Report Type</option>
             {reportTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
+              <option key={type} value={type}>
+                {type}
+              </option>
             ))}
           </select>
         </div>
@@ -136,7 +157,7 @@ const NewReportForm = ({ onSubmitReport }) => {
           onChange={handleInputChange}
           required
           rows="4"
-          placeholder="Provide detailed information about the issue, including when it started, impact on community, etc."
+          placeholder="Provide detailed information about the issue"
           className="form-textarea"
         ></textarea>
       </div>
@@ -156,22 +177,12 @@ const NewReportForm = ({ onSubmitReport }) => {
       </div>
 
       <div className="form-actions">
-        <button
-          type="button"
-          onClick={() => console.log('Draft saved:', formData)}
-          className="btn btn-draft"
-        >
-          Save as Draft
-        </button>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="btn btn-submit"
-        >
+        
+        <button type="submit" className="btn btn-submit">
           Submit Report
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/login"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard  from './pages/Dashboard';
+import ReportDetails from "./myComponents/ReportDetails";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Dashboard" element={<Dashboard />} />
 
-            
+        <Route path="/report/:id" element={<ReportDetails />} />   
       </Routes>
     </Router>
   );

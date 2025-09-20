@@ -1,8 +1,11 @@
 import React from 'react';
 import { FileText, CheckCircle, Clock, AlertTriangle, MapPin, Calendar } from 'lucide-react';
+import { useNavigate } from "react-router-dom";   
 import '../styles/ReportStatus.css';
 
 const ReportStatus = ({ reports }) => {
+  const navigate = useNavigate(); 
+
   const getStatusIcon = (status) => {
     switch (status) {
       case 'Resolved':
@@ -29,24 +32,11 @@ const ReportStatus = ({ reports }) => {
     }
   };
 
-  const getPriorityClass = (priority) => {
-    switch (priority) {
-      case 'High':
-        return 'badge priority-high';
-      case 'Medium':
-        return 'badge priority-medium';
-      case 'Low':
-        return 'badge priority-low';
-      default:
-        return 'badge';
-    }
-  };
-
   return (
     <div className="report-card">
       <h3 className="report-title">
         <FileText size={24} />
-        Reports Status
+        My Reports
       </h3>
       
       <div className="report-list">
@@ -58,7 +48,6 @@ const ReportStatus = ({ reports }) => {
                   <h4>{report.title}</h4>
                   <p>Report ID: {report._id}</p>
 
-                  {/* Location ko readable banaya */}
                   <div className="report-meta">
                     <MapPin size={14} />
                     {report.location?.coordinates
@@ -75,15 +64,17 @@ const ReportStatus = ({ reports }) => {
                 <div className="report-badges">
                   {getStatusIcon(report.status)}
                   <span className={getStatusClass(report.status)}>{report.status}</span>
-                  <span className={getPriorityClass(report.priority || "Low")}>
-                    {report.priority || "Low"} Priority
-                  </span>
                 </div>
               </div>
 
               <div className="report-footer">
                 <span className="report-type">{report.category}</span>
-                <button className="report-btn">View Details</button>
+                <button 
+                  className="report-btn"
+                  onClick={() => navigate(`/report/${report._id}`)}   
+                >
+                  View Details
+                </button>
               </div>
             </div>
           ))

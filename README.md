@@ -35,5 +35,8 @@ npm install multer
 
 npm install recharts
 
+npm install react-leaflet leaflet
+
+
 
 

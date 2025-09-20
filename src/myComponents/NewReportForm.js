@@ -87,9 +87,6 @@ const NewReportForm = ({ onSubmitReport }) => {
       }
 
       alert("Report submitted successfully!");
-      if (onSubmitReport) onSubmitReport(created.data);
-
-   
       setFormData({
         category: "",
         title: "",
@@ -97,6 +94,8 @@ const NewReportForm = ({ onSubmitReport }) => {
         location: "",
         media: null,
       });
+
+      if (onSubmitReport) onSubmitReport(created.data);
     } catch (err) {
       console.error("Error submitting report:", err);
       alert(err.message || "Failed to submit report");

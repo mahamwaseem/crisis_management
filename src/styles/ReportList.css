@@ -1,0 +1,19 @@
+.report-summary {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.summary-box {
+  flex: 1;
+  padding: 15px;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+}
+
+.summary-box.total { background: #3b82f6; }     
+.summary-box.resolved { background: #16a34a; }  
+.summary-box.pending { background: #dc2626; }   
+.summary-box.progress { background: #ca8a04; }  

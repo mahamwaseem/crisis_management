@@ -7,7 +7,6 @@ import "../styles/Dashboard.css";
 
 const CitizenDashboard = () => {
   const [user, setUser] = useState(null);
-  const [reports, setReports] = useState([]);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const navigate = useNavigate();
@@ -27,21 +26,6 @@ const CitizenDashboard = () => {
     fetchUser();
   }, []);
 
-  // Reports fetch
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const res = await axios.get("/report", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
-        });
-        setReports(Array.isArray(res.data) ? res.data : res.data.reports || []);
-      } catch (err) {
-        console.error("Error fetching reports:", err);
-      }
-    };
-    fetchReports();
-  }, []);
-
   // Logout
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -50,7 +34,7 @@ const CitizenDashboard = () => {
 
   return (
     <div className="citizen-dashboard">
-      {/* Header */}
+     
       <header className="dashboard-header">
         <div className="header-container">
           <div className="header-content">
@@ -77,7 +61,7 @@ const CitizenDashboard = () => {
         </div>
       </header>
 
-      {/* Logout Modal */}
+      
       {showLogoutConfirm && (
         <div className="logout-modal">
           <div className="logout-modal-content">
@@ -98,7 +82,7 @@ const CitizenDashboard = () => {
         </div>
       )}
 
-      {/* Navigation */}
+      
       <div className="navigation-tabs">
         <div className="tabs-container">
           <div className="tabs-list">
@@ -111,33 +95,15 @@ const CitizenDashboard = () => {
             <Link to="/newreport" className="tab-button">
               File New Report
             </Link>
+           
           </div>
         </div>
       </div>
 
-      {/* Dashboard Content */}
+      
       <main className="main-content">
         <div className="dashboard-content">
           {user ? <UserInfo user={user} /> : <p>Loading user info...</p>}
-
-          <div className="stats-grid">
-            <div className="stat-card">
-              <h3 className="stat-title">Total Reports</h3>
-              <p className="stat-value total">{reports.length}</p>
-            </div>
-            <div className="stat-card">
-              <h3 className="stat-title">Pending</h3>
-              <p className="stat-value pending">
-                {reports.filter((r) => r.status === "Pending").length}
-              </p>
-            </div>
-            <div className="stat-card">
-              <h3 className="stat-title">Resolved</h3>
-              <p className="stat-value resolved">
-                {reports.filter((r) => r.status === "Resolved").length}
-              </p>
-            </div>
-          </div>
         </div>
       </main>
     </div>

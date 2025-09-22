@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Header from "./pages//header";
 import HeroSection from "./pages/heroSection";
@@ -10,6 +9,10 @@ import Login from "./pages/login"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard  from './pages/Dashboard';
 import ReportDetails from "./myComponents/ReportDetails";
+import ReportsList from "./myComponents/ReportList";
+import NewReportForm from "./myComponents/NewReportForm";
+
+
 
 function App() {
   return (
@@ -31,7 +34,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Dashboard" element={<Dashboard />} />
-
+        <Route path="/myreports" element={<ReportsList />} />
+        <Route path="/newreport" element={<NewReportForm />} />
+        
         <Route path="/report/:id" element={<ReportDetails />} />   
       </Routes>
     </Router>

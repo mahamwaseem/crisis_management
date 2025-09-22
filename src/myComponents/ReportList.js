@@ -9,13 +9,14 @@ const ReportsList = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const token = localStorage.getItem("authToken"); // token uthao
+        const token = localStorage.getItem("authToken"); 
         const res = await axios.get("http://localhost:3000/report", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setReports(res.data.data || []);
+        console.log("API Response:", res.data);
+        setReports(res.data.data || res.data || []);
       } catch (err) {
         console.error("Error fetching reports:", err);
         setError("Failed to fetch reports");

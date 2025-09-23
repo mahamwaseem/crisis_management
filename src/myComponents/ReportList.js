@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, CheckCircle, Clock, AlertTriangle, MapPin, Calendar } from 'lucide-react';
-import { useNavigate } from "react-router-dom";   
+import { useNavigate } from "react-router-dom";
 import axios from "../api/axiosConfig";
 import '../styles/ReportList.css';
 
@@ -8,7 +8,7 @@ const ReportStatus = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -55,7 +55,7 @@ const ReportStatus = () => {
   if (loading) return <p>Loading reports...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
-  
+
   const totalReports = reports.length;
   const resolvedReports = reports.filter(r => r.status === "Resolved").length;
   const pendingReports = reports.filter(r => r.status === "Pending").length;
@@ -63,12 +63,20 @@ const ReportStatus = () => {
 
   return (
     <div className="report-card">
-      <h3 className="report-title">
-        <FileText size={24} />
-        My Reports
-      </h3>
+      <div className="report-title-bar">
+        <div className="title-left">
+          <FileText size={24} />
+          <span>My Reports</span>
+        </div>
+        <button
+          className="back-btn"
+          onClick={() => navigate("/dashboard")}
+        >
+          Back to Dashboard
+        </button>
+      </div>
 
-     
+
       <div className="report-summary">
         <div className="summary-box total">
           <h4>Total</h4>
@@ -88,7 +96,7 @@ const ReportStatus = () => {
         </div>
       </div>
 
-      
+
       <div className="report-list">
         {reports.length > 0 ? (
           reports.map((report) => (
@@ -119,9 +127,9 @@ const ReportStatus = () => {
 
               <div className="report-footer">
                 <span className="report-type">{report.category}</span>
-                <button 
+                <button
                   className="report-btn"
-                  onClick={() => navigate(`/report/${report._id}`)}   
+                  onClick={() => navigate(`/report/${report._id}`)}
                 >
                   View Details
                 </button>

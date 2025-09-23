@@ -1,7 +1,5 @@
-/* Citizen Dashboard */
 .citizen-dashboard {
-  min-height: 100vh;
- 
+  min-height: 100vh; 
   background: linear-gradient(to right, #f9fafb, #f3f4f6);
   display: flex;
   flex-direction: column;
@@ -117,35 +115,6 @@
   gap: 2rem;
 }
 
-/* Stats Grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-@media (min-width: 1024px) {
-  .stats-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-.stat-card {
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  padding: 1.5rem;
-}
-.stat-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-}
-.stat-value {
-  font-size: 1.875rem;
-  font-weight: 700;
-}
-.stat-value.total { color: #2563eb; }
-.stat-value.pending { color: #dc2626; }
-.stat-value.resolved { color: #16a34a; }
 
 /* Responsive tweaks */
 @media (max-width: 640px) {

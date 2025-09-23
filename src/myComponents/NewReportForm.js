@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // ✅ Add this
 import "../styles/NewReportForm.css";
 
 const NewReportForm = ({ onSubmitReport }) => {
+  const navigate = useNavigate(); // ✅ Add this
+
   const [formData, setFormData] = useState({
     category: "",
     title: "",
@@ -36,17 +39,16 @@ const NewReportForm = ({ onSubmitReport }) => {
       const token = localStorage.getItem("authToken");
       if (!token) {
         alert("Please login first.");
-        window.location.href = "/login";
+        navigate("/login");
         return;
       }
 
-      
+      // ✅ Location from browser
       const pos = await new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
       );
       const { latitude, longitude } = pos.coords;
 
-    
       const jsonPayload = {
         title: formData.title,
         description: formData.description,
@@ -54,6 +56,7 @@ const NewReportForm = ({ onSubmitReport }) => {
         location: { type: "Point", coordinates: [longitude, latitude] },
       };
 
+      // ✅ Report create API
       const createRes = await fetch("http://localhost:3000/report", {
         method: "POST",
         headers: {
@@ -66,7 +69,7 @@ const NewReportForm = ({ onSubmitReport }) => {
       const created = await createRes.json();
       if (!createRes.ok) throw created;
 
-      
+      // ✅ Upload media if any
       if (formData.media) {
         const form = new FormData();
         form.append("media", formData.media);
@@ -76,7 +79,7 @@ const NewReportForm = ({ onSubmitReport }) => {
           {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
             },
             body: form,
           }
@@ -104,10 +107,19 @@ const NewReportForm = ({ onSubmitReport }) => {
 
   return (
     <form className="report-form" onSubmit={handleSubmit}>
-      <h3 className="report-form-title">
-        <Plus size={24} />
-        File New Report
-      </h3>
+      <div className="report-form-title">
+        <div className="title-left">
+          <Plus size={24} />
+          <span>File New Report</span>
+        </div>
+        <button
+          type="button"
+          className="back-btn"
+          onClick={() => navigate("/dashboard")}
+        >
+          Back to Dashboard
+        </button>
+      </div>
 
       <div className="report-grid">
         <div className="form-group">

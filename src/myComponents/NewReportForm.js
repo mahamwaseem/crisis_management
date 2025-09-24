@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // ✅ Add this
+import { useNavigate } from "react-router-dom"; 
 import "../styles/NewReportForm.css";
 
 const NewReportForm = ({ onSubmitReport }) => {
-  const navigate = useNavigate(); // ✅ Add this
+  const navigate = useNavigate(); 
 
   const [formData, setFormData] = useState({
     category: "",
@@ -43,7 +43,7 @@ const NewReportForm = ({ onSubmitReport }) => {
         return;
       }
 
-      // ✅ Location from browser
+
       const pos = await new Promise((resolve, reject) =>
         navigator.geolocation.getCurrentPosition(resolve, reject)
       );
@@ -56,7 +56,7 @@ const NewReportForm = ({ onSubmitReport }) => {
         location: { type: "Point", coordinates: [longitude, latitude] },
       };
 
-      // ✅ Report create API
+   
       const createRes = await fetch("http://localhost:3000/report", {
         method: "POST",
         headers: {
@@ -69,7 +69,7 @@ const NewReportForm = ({ onSubmitReport }) => {
       const created = await createRes.json();
       if (!createRes.ok) throw created;
 
-      // ✅ Upload media if any
+
       if (formData.media) {
         const form = new FormData();
         form.append("media", formData.media);

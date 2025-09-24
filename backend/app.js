@@ -8,6 +8,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require("./routes/adminRoutes");
 const { initSocket } = require("./utils/socket");
 const connectDB = require("./config/db");
+const path = require("path");
 
 const app = express();
 connectDB();
@@ -23,7 +24,7 @@ app.use(cors());
 // routes
 app.use('/auth', AuthRouter);
 app.use('/report', ReportRouter);
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use('/comment', commentRoutes);
 app.use('/notification', notificationRoutes);
 app.use("/admin", adminRoutes);

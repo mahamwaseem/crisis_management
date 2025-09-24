@@ -71,14 +71,14 @@ const ReportDetails = () => {
               file.endsWith(".mp4") ? (
                 <video key={index} controls>
                   <source
-                    src={`http://localhost:5000${file}`}
+                    src={`http://localhost:3000${file}`}
                     type="video/mp4"
                   />
                 </video>
               ) : (
                 <img
                   key={index}
-                  src={`http://localhost:5000${file}`}
+                  src={`http://localhost:3000${file}`}
                   alt="report media"
                 />
               )

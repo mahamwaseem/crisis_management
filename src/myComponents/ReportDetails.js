@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import "../styles/ReportDetails.css";
+
+const containerStyle = {
+  width: "100%",
+  height: "300px",
+};
 
 const ReportDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyDBJDsqlNlPZD6ZRnti7sCWYU-jEo2OB_c",
+  });
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -35,33 +44,29 @@ const ReportDetails = () => {
   if (!report) return <p className="error">Report not found.</p>;
 
   const coordinates = report.location?.coordinates || [0, 0];
-  const position = [coordinates[1], coordinates[0]];
+  const position = { lat: coordinates[1], lng: coordinates[0] };
 
   return (
     <div className="report-page">
       <div className="report-navbar">
         <span>📋 Report Details</span>
       </div>
-      
+
 
       <div className="report-details">
         <h2>{report.title}</h2>
         <p className="report-desc">{report.description}</p>
 
         <div className="map-container">
-          <MapContainer
-            center={position}
-            zoom={13}
-            style={{ height: "300px", width: "100%" }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="&copy; OpenStreetMap contributors"
-            />
-            <Marker position={position}>
-              <Popup>{report.title}</Popup>
-            </Marker>
-          </MapContainer>
+          {isLoaded && (
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={position}
+              zoom={13}
+            >
+              <Marker position={position} />
+            </GoogleMap>
+          )}
         </div>
 
         <div className="media-section">

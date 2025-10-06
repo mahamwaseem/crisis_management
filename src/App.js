@@ -11,6 +11,8 @@ import Dashboard  from './pages/Dashboard';
 import ReportDetails from "./myComponents/ReportDetails";
 import ReportsList from "./myComponents/ReportList";
 import NewReportForm from "./myComponents/NewReportForm";
+import AdminDashboard from "./pages/admin-dashboard"
+
 
 
 
@@ -36,7 +38,9 @@ function App() {
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/myreports" element={<ReportsList />} />
         <Route path="/newreport" element={<NewReportForm />} />      
-        <Route path="/report/:id" element={<ReportDetails />} />  
+        <Route path="/report/:id" element={<ReportDetails />} /> 
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        
        
  
       </Routes>

@@ -24,12 +24,10 @@ const getAllReports = async (req, res) => {
 
 const getAnalytics = async (req, res) => {
   try {
-    
     const reportsByCategory = await Report.aggregate([
       { $group: { _id: "$category", count: { $sum: 1 } } }
     ]);
 
-    
     const resolutionTimes = await Report.aggregate([
       { $match: { resolvedAt: { $exists: true } } },
       {
@@ -45,27 +43,27 @@ const getAnalytics = async (req, res) => {
       }
     ]);
 
-    // Heatmap data (by location)
-    const heatmapData = await Report.aggregate([
-      {
-        $group: {
-          _id: { lat: "$location.lat", lng: "$location.lng" },
-          count: { $sum: 1 }
-        }
-      }
-    ]);
+    const totalReports = await Report.countDocuments();
+    const resolvedReports = await Report.countDocuments({ status: /resolved/i });
+    const inProgressReports = await Report.countDocuments({ status: /in progress/i });
+    const closedReports = await Report.countDocuments({ status: /closed/i });
+    const pendingReports = await Report.countDocuments({ status: /pending/i });
 
-    res.status(200).json({
-      success: true,
-      analytics: {
-        reportsByCategory,
-        avgResolutionTime: resolutionTimes[0]?.avgResolutionTime || 0,
-        heatmapData
-      }
+    const totalUsers = await User.countDocuments();
+
+    res.json({
+      totalUsers,
+      totalReports,
+      resolvedReports,
+      inProgressReports,
+      closedReports,
+      pendingReports,
+      reportsByCategory,
+      avgResolutionTime:
+        resolutionTimes[0]?.avgResolutionTime / (1000 * 60 * 60) || 0 
     });
-  } catch (err) {
-    console.error("Error fetching analytics:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching analytics", error });
   }
 };
 

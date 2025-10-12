@@ -4,7 +4,7 @@ const signupValidation = (req, res, next) => {
   const Schema = Joi.object({
     name: Joi.string().min(3).max(100).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(4).max(100).required(),
+    password: Joi.string().min(4).max(10).required(),
     role: Joi.string().valid("Citizen", "Admin", "Moderator").optional().default("Citizen"),
     phone: Joi.string().pattern(/^[0-9]{10,15}$/).optional(), // 10–15 digit phone number
     address: Joi.string().max(200).optional(),
@@ -25,7 +25,7 @@ const signupValidation = (req, res, next) => {
 const loginValidation = (req, res, next) => {
   const Schema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(4).max(100).required(),
+    password: Joi.string().min(4).max(10).required(),
   });
 
   const { error } = Schema.validate(req.body);
@@ -54,7 +54,7 @@ const updateProfileValidation = (req, res, next) => {
     name: Joi.string().min(3).max(100).optional(),
     email: Joi.string().email().optional(),
     role: Joi.string().valid("Citizen", "Admin", "Moderator").optional(),
-    password: Joi.string().min(4).max(100).optional(),
+    password: Joi.string().min(4).max(10).optional(),
   });
 
   const { error, value } = Schema.validate(req.body);

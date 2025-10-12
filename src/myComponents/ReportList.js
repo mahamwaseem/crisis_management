@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, CheckCircle, Clock, AlertTriangle, MapPin, Calendar } from 'lucide-react';
+import { FileText, CheckCircle, Clock, AlertTriangle, MapPin, Calendar, Trash2 } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axiosConfig";
 import '../styles/ReportList.css';
@@ -9,6 +9,20 @@ const ReportStatus = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const handleDelete = async (reportId) => {
+    if (window.confirm("Are you sure you want to delete this report?")) {
+      try {
+        await axios.delete(`/report/${reportId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        });
+        setReports(reports.filter(report => report._id !== reportId));
+      } catch (err) {
+        alert("Failed to delete report");
+        console.error("Delete Error:", err);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -102,12 +116,21 @@ const ReportStatus = () => {
 
               <div className="report-footer">
                 <span className="report-type">{report.category}</span>
-                <button
-                  className="report-btn"
-                  onClick={() => navigate(`/report/${report._id}`)}
-                >
-                  View Details
-                </button>
+                <div className="report-actions">
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(report._id)}
+                    title="Delete Report"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                  <button
+                    className="report-btn"
+                    onClick={() => navigate(`/report/${report._id}`)}
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
             </div>
           ))

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Bell, LogOut } from "lucide-react";
+import { Bell, LogOut, FileText, CheckCircle, Clock, AlertTriangle } from "lucide-react";
 import UserInfo from "./UserInfo";
 import axios from "../api/axiosConfig";
 import "../styles/Dashboard.css";
@@ -8,6 +8,9 @@ import "../styles/Dashboard.css";
 const CitizenDashboard = () => {
   const [user, setUser] = useState(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -24,6 +27,22 @@ const CitizenDashboard = () => {
       }
     };
     fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const res = await axios.get("/report", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        });
+        setReports(Array.isArray(res.data) ? res.data : res.data.data || res.data.reports || []);
+      } catch (err) {
+        setError("Failed to fetch reports");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReports();
   }, []);
 
   // Logout
@@ -104,6 +123,33 @@ const CitizenDashboard = () => {
       <main className="main-content">
         <div className="dashboard-content">
           {user ? <UserInfo user={user} /> : <p>Loading user info...</p>}
+          
+          {!loading && !error && (
+            <div className="status-container">
+              <div className="summary-heading">
+                <h2>Report Status Overview</h2>
+              </div>
+              <div className="report-summary">
+                <div className="summary-box total">
+                  <h4>Total Reports</h4>
+                  <p>{reports.length}</p>
+                </div>
+                <div className="summary-box resolved">
+                  <h4>Resolved</h4>
+                  <p>{reports.filter(r => r.status === "Resolved").length}</p>
+                </div>
+                <div className="summary-box pending">
+                  <h4>Pending</h4>
+                  <p>{reports.filter(r => r.status === "Pending").length}</p>
+                </div>
+                <div className="summary-box progress">
+                  <h4>In Progress</h4>
+                  <p>{reports.filter(r => r.status === "In Progress").length}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
       </main>
     </div>

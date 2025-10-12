@@ -98,3 +98,48 @@
 .signup-footer a:hover {
   text-decoration: underline;
 }
+
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-password-toggle-button {
+  display: none !important;
+}
+
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+
+.password-input-container input {
+  width: 100%;
+  padding-right: 44px; 
+  box-sizing: border-box;
+}
+
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1rem;
+}
+
+
+.password-toggle:hover { color: #8C1007; }
+.password-toggle:focus { outline: 2px solid rgba(140,16,7,0.15); border-radius: 6px; }

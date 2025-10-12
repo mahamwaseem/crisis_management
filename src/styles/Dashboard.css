@@ -86,6 +86,9 @@
   cursor: pointer;
   transition: all 0.2s ease;
   color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .tab-button.active {
   border-bottom-color: #FFCC00;

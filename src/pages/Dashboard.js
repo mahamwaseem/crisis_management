@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Bell, LogOut, FileText, CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import { Bell, LogOut, FileText, Layout, FileSpreadsheet, FilePlus } from "lucide-react";
 import UserInfo from "./UserInfo";
 import axios from "../api/axiosConfig";
 import "../styles/Dashboard.css";
@@ -106,15 +106,17 @@ const CitizenDashboard = () => {
         <div className="tabs-container">
           <div className="tabs-list">
             <Link to="/dashboard" className="tab-button">
+              <Layout size={18} />
               Dashboard
             </Link>
             <Link to="/myreports" className="tab-button">
+              <FileSpreadsheet size={18} />
               My Reports
             </Link>
             <Link to="/newreport" className="tab-button">
+              <FilePlus size={18} />
               File New Report
             </Link>
-           
           </div>
         </div>
       </div>

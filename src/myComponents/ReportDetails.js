@@ -46,51 +46,68 @@ const ReportDetails = () => {
   const coordinates = report.location?.coordinates || [0, 0];
   const position = { lat: coordinates[1], lng: coordinates[0] };
 
+  const handleBackClick = () => {
+    navigate('/myreports');
+  };
+
   return (
     <div className="report-page">
       <div className="report-navbar">
         <span>📋 Report Details</span>
+        <button onClick={handleBackClick} className="back-button">
+          ← Back to Reports
+        </button>
       </div>
 
+      <div className="report-details-container">
+        <div className="left-section">
+          <div className="report-details">
+            <h2>{report.title}</h2>
 
-      <div className="report-details">
-        <h2>{report.title}</h2>
-        <p className="report-desc">{report.description}</p>
+            <div className="map-container">
+              {isLoaded && (
+                <GoogleMap
+                  mapContainerStyle={containerStyle}
+                  center={position}
+                  zoom={13}
+                >
+                  <Marker position={position} />
+                </GoogleMap>
+              )}
+            </div>
 
-        <div className="map-container">
-          {isLoaded && (
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={position}
-              zoom={13}
-            >
-              <Marker position={position} />
-            </GoogleMap>
-          )}
+            <div className="media-section">
+              <h3>Attached Media</h3>
+              {report.media && report.media.length > 0 ? (
+                report.media.map((file, index) =>
+                  file.endsWith(".mp4") ? (
+                    <video key={index} controls>
+                      <source
+                        src={`http://localhost:3000${file}`}
+                        type="video/mp4"
+                      />
+                    </video>
+                  ) : (
+                    <img
+                      key={index}
+                      src={`http://localhost:3000${file}`}
+                      alt="report media"
+                    />
+                  )
+                )
+              ) : (
+                <p>No media uploaded.</p>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="media-section">
-          <h3>Attached Media</h3>
-          {report.media && report.media.length > 0 ? (
-            report.media.map((file, index) =>
-              file.endsWith(".mp4") ? (
-                <video key={index} controls>
-                  <source
-                    src={`http://localhost:3000${file}`}
-                    type="video/mp4"
-                  />
-                </video>
-              ) : (
-                <img
-                  key={index}
-                  src={`http://localhost:3000${file}`}
-                  alt="report media"
-                />
-              )
-            )
-          ) : (
-            <p>No media uploaded.</p>
-          )}
+        {/* ✅ Description on the right side */}
+        <div className="right-section">
+          <div className="description-box">
+            <h3>Description</h3>
+            <p>{report.description}</p>
+          </div>
         </div>
       </div>
     </div>

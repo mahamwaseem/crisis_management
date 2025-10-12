@@ -56,11 +56,6 @@ const ReportStatus = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
 
-  const totalReports = reports.length;
-  const resolvedReports = reports.filter(r => r.status === "Resolved").length;
-  const pendingReports = reports.filter(r => r.status === "Pending").length;
-  const inProgressReports = reports.filter(r => r.status === "In Progress").length;
-
   return (
     <div className="report-card">
       <div className="report-title-bar">
@@ -74,26 +69,6 @@ const ReportStatus = () => {
         >
           Back to Dashboard
         </button>
-      </div>
-
-
-      <div className="report-summary">
-        <div className="summary-box total">
-          <h4>Total</h4>
-          <p>{totalReports}</p>
-        </div>
-        <div className="summary-box resolved">
-          <h4>Resolved</h4>
-          <p>{resolvedReports}</p>
-        </div>
-        <div className="summary-box pending">
-          <h4>Pending</h4>
-          <p>{pendingReports}</p>
-        </div>
-        <div className="summary-box progress">
-          <h4>In Progress</h4>
-          <p>{inProgressReports}</p>
-        </div>
       </div>
 
 

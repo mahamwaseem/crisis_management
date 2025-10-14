@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bell, LogOut, Users, FileText, CheckCircle, Clock, XCircle, TrendingUp } from "lucide-react";
+import { Bell, LogOut, FileText, CheckCircle, Clock, XCircle, AlertCircle, TrendingUp } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import UserInfo from "./UserInfo";
 import axios from "../api/axiosConfig";
@@ -9,7 +9,6 @@ const AdminDashboard = () => {
   const [user, setUser] = useState(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [stats, setStats] = useState({
-    totalUsers: 0,
     totalReports: 0,
     resolvedReports: 0,
     inProgressReports: 0,
@@ -17,7 +16,6 @@ const AdminDashboard = () => {
     pendingReports: 0
   });
 
- 
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -32,44 +30,32 @@ const AdminDashboard = () => {
     fetchUser();
   }, []);
 
-  
- 
-useEffect(() => {
-  const fetchStats = async () => {
-    try {
-      const res = await axios.get("/admin/analytics", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
-      });
-
-    const data = res.data.analytics;
-
-setStats({
-  totalUsers: data.totalUsers || 0,
-  totalReports: data.totalReports || 0,
-  resolvedReports: data.resolvedReports || 0,
-  inProgressReports: data.inProgressReports || 0,
-  closedReports: data.closedReports || 0,
-  pendingReports: data.pendingReports || 0,
-});
-
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  };
-  fetchStats();
-}, []);
-
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get("/admin/analytics", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
+        });
+        const data = res.data.analytics || res.data;
+        setStats({
+          totalReports: data.totalReports || 0,
+          resolvedReports: data.resolvedReports || 0,
+          inProgressReports: data.inProgressReports || 0,
+          closedReports: data.closedReports || 0,
+          pendingReports: data.pendingReports || 0,
+        });
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    };
+    fetchStats();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     window.location.href = "/";
   };
 
-  const handleNavigation = (path) => {
-    window.location.href = path;
-  };
-
- 
   const reportStatusData = [
     { name: "Resolved", value: stats.resolvedReports, color: "#10b981" },
     { name: "In Progress", value: stats.inProgressReports, color: "#f59e0b" },
@@ -77,9 +63,7 @@ setStats({
     { name: "Pending", value: stats.pendingReports, color: "#ef4444" }
   ];
 
- 
   const overviewData = [
-    { name: "Users", value: stats.totalUsers, color: "#8b5cf6" },
     { name: "Reports", value: stats.totalReports, color: "#3b82f6" }
   ];
 
@@ -131,54 +115,16 @@ setStats({
         </div>
       )}
 
-      <div className="navigation-tabs">
-        <div className="tabs-container">
-          <div className="tabs-list">
-            <button onClick={() => handleNavigation('/dashboard')} className="tab-button">
-              Dashboard
-            </button>
-            <button onClick={() => handleNavigation('/myreports')} className="tab-button">
-              Reports
-            </button>
-            <button onClick={() => handleNavigation('/users')} className="tab-button">
-              Users
-            </button>
-            <button onClick={() => handleNavigation('/newreport')} className="tab-button">
-              File New Report
-            </button>
-          </div>
-        </div>
-      </div>
-
       <main className="main-content">
         <div className="dashboard-content">
           {user ? <UserInfo user={user} /> : <p>Loading user info...</p>}
 
-         
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
             gap: '20px', 
             marginTop: '30px' 
           }}>
-            <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              padding: '25px',
-              borderRadius: '12px',
-              color: 'white',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <p style={{ fontSize: '14px', opacity: 0.9, margin: 0 }}>Total Users</p>
-                  <h2 style={{ fontSize: '36px', fontWeight: 'bold', margin: '10px 0 0 0' }}>
-                    {stats.totalUsers}
-                  </h2>
-                </div>
-                <Users size={40} style={{ opacity: 0.8 }} />
-              </div>
-            </div>
-
             <div style={{
               background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
               padding: '25px',
@@ -232,28 +178,57 @@ setStats({
                 <Clock size={40} style={{ opacity: 0.8 }} />
               </div>
             </div>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+              padding: '25px',
+              borderRadius: '12px',
+              color: 'white',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <p style={{ fontSize: '14px', opacity: 0.9, margin: 0 }}>Closed</p>
+                  <h2 style={{ fontSize: '36px', fontWeight: 'bold', margin: '10px 0 0 0' }}>
+                    {stats.closedReports}
+                  </h2>
+                </div>
+                <XCircle size={40} style={{ opacity: 0.8 }} />
+              </div>
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+              padding: '25px',
+              borderRadius: '12px',
+              color: 'white',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <p style={{ fontSize: '14px', opacity: 0.9, margin: 0 }}>Pending</p>
+                  <h2 style={{ fontSize: '36px', fontWeight: 'bold', margin: '10px 0 0 0' }}>
+                    {stats.pendingReports}
+                  </h2>
+                </div>
+                <AlertCircle size={40} style={{ opacity: 0.8 }} />
+              </div>
+            </div>
           </div>
 
-         
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
             gap: '25px', 
             marginTop: '30px' 
           }}>
-        
             <div style={{
               background: 'white',
               padding: '25px',
               borderRadius: '12px',
               boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
             }}>
-              <h3 style={{ 
-                fontSize: '18px', 
-                fontWeight: '600', 
-                marginBottom: '20px',
-                color: '#1f2937'
-              }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px', color: '#1f2937' }}>
                 Reports Status Distribution
               </h3>
               <ResponsiveContainer width="100%" height={300}>
@@ -284,12 +259,7 @@ setStats({
               borderRadius: '12px',
               boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
             }}>
-              <h3 style={{ 
-                fontSize: '18px', 
-                fontWeight: '600', 
-                marginBottom: '20px',
-                color: '#1f2937'
-              }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px', color: '#1f2937' }}>
                 System Overview
               </h3>
               <ResponsiveContainer width="100%" height={300}>
@@ -315,15 +285,7 @@ setStats({
             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
             marginTop: '25px'
           }}>
-            <h3 style={{ 
-              fontSize: '18px', 
-              fontWeight: '600', 
-              marginBottom: '20px',
-              color: '#1f2937',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <TrendingUp size={24} color="#10b981" />
               Performance Summary
             </h3>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Bell, LogOut, FileText, Layout, FileSpreadsheet, FilePlus } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import UserInfo from "./UserInfo";
 import axios from "../api/axiosConfig";
 import "../styles/Dashboard.css";
@@ -147,6 +148,59 @@ const CitizenDashboard = () => {
                 <div className="summary-box progress">
                   <h4>In Progress</h4>
                   <p>{reports.filter(r => r.status === "In Progress").length}</p>
+                </div>
+              </div>
+
+              <div className="charts-container">
+                <div className="chart-box">
+                  <h3>Reports Distribution</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={[
+                          { name: 'Resolved', value: reports.filter(r => r.status === "Resolved").length, color: '#16a34a' },
+                          { name: 'In Progress', value: reports.filter(r => r.status === "In Progress").length, color: '#ca8a04' },
+                          { name: 'Pending', value: reports.filter(r => r.status === "Pending").length, color: '#dc2626' }
+                        ]}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {reports.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="chart-box">
+                  <h3>Reports by Category</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart
+                      data={Object.entries(
+                        reports.reduce((acc, report) => {
+                          acc[report.category] = (acc[report.category] || 0) + 1;
+                          return acc;
+                        }, {})
+                      ).map(([category, count]) => ({
+                        category,
+                        count
+                      }))}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="category" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="#8C1007" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>

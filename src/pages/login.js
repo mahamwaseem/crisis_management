@@ -1,12 +1,14 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import '../styles/login.css';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -64,7 +66,22 @@ const LoginPage = () => {
 
             <div className="form-group">
               <label>Password</label>
-              <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+              <div className="password-input-container">
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  name="password" 
+                  value={formData.password} 
+                  onChange={handleChange} 
+                  required 
+                />
+                <button 
+                  type="button" 
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
 
             <button type="submit" className="login-btn">Login</button>

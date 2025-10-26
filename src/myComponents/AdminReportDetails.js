@@ -51,24 +51,7 @@ const AdminReportDetails = () => {
     navigate('/admin/reports');
   };
 
-  // Admin-specific status update function can be added here
-  const handleStatusUpdate = async (newStatus) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      await axios.patch(
-        `http://localhost:3000/admin/report/${id}/status`,
-        { status: newStatus },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setReport({ ...report, status: newStatus });
-    } catch (err) {
-      console.error(err);
-    }
-  };
+
 
   return (
     <div className="report-page">
@@ -106,37 +89,7 @@ const AdminReportDetails = () => {
           </div>
         </div>
 
-        {/* Report Status Controls */}
-        <div className="info-card status-card">
-          <div className="card-header">
-            <i className="fas fa-tasks"></i>
-            <h3>Update Status</h3>
-          </div>
-          <div className="status-controls">
-            <button 
-              onClick={() => handleStatusUpdate('pending')}
-              className={`status-btn ${report.status === 'pending' ? 'active' : ''}`}
-            >
-              <i className="fas fa-clock"></i>
-              Pending
-            </button>
-            <button 
-              onClick={() => handleStatusUpdate('in-progress')}
-              className={`status-btn ${report.status === 'in-progress' ? 'active' : ''}`}
-            >
-              <i className="fas fa-spinner"></i>
-              In Progress
-            </button>
-            <button 
-              onClick={() => handleStatusUpdate('resolved')}
-              className={`status-btn ${report.status === 'resolved' ? 'active' : ''}`}
-            >
-              <i className="fas fa-check-circle"></i>
-              Resolved
-            </button>
-          </div>
-        </div>
-
+        
         {/* Report Details Card */}
         <div className="info-card details-card">
           <div className="card-header">

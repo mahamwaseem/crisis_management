@@ -29,20 +29,17 @@
   background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
 }
 
-.status-card .card-header {
-  background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%);
-}
 
 .details-card .card-header {
-  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
 }
 
 .map-card .card-header {
-  background: linear-gradient(135deg, #16a085 0%, #27ae60 100%);
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
 }
 
 .media-card .card-header {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+ background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
 }
 
 .card-header {
@@ -137,68 +134,6 @@
   100% { transform: scale(1); }
 }
 
-/* Status Card */
-.status-card {
-  grid-column: span 1;
-}
-
-.status-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-}
-
-.status-controls {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 25px;
-  border-radius: 15px;
-  margin: 15px;
-}
-
-.status-btn {
-  padding: 15px 20px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-  margin-bottom: 10px;
-  width: 100%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.status-btn i {
-  font-size: 1.3em;
-}
-
-.status-btn:hover {
-  transform: translateX(8px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.status-btn.active {
-  transform: scale(1.02);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.status-btn:nth-child(1) {
-  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
-  color: #000;
-}
-
-.status-btn:nth-child(2) {
-  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
-  color: white;
-}
-
-.status-btn:nth-child(3) {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-  color: white;
-}
 
 /* Details Card */
 .details-card {

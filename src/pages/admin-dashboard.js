@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Bell,
   LogOut,
   FileText,
   CheckCircle,
@@ -89,7 +88,6 @@ const AdminDashboard = () => {
         <div className="header-content">
           <h1 className="header-title">Admin Portal</h1>
           <div className="header-actions">
-            <Bell className="notification-bell" size={20} />
             {user && (
               <div className="user-info">
                 <div className="user-avatar">

@@ -16,6 +16,32 @@ const getNotifications = async (req, res) => {
   }
 };
 
+const createNotification = async (req, res) => {
+  try {
+    const { userId, message, type } = req.body;
+
+    // Create new notification
+    const notification = await Notification.create({
+      userId,
+      message,
+      type: type || "System"
+    });
+
+    res.status(201).json({
+      success: true,
+      data: notification
+    });
+
+    // Emit socket event 
+    if (req.app.get('io')) {
+      req.app.get('io').to(userId.toString()).emit('newNotification', notification);
+    }
+  } catch (err) {
+    console.error("Error creating notification:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 const markAsRead = async (req, res) => {
   try {
     const notification = await Notification.findByIdAndUpdate(
@@ -52,6 +78,7 @@ const deleteNotification = async (req, res) => {
 
 module.exports = { 
   getNotifications,
+  createNotification,
   markAsRead,
   deleteNotification
  };
